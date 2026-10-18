@@ -1,0 +1,190 @@
+# ─────────────────────────────────────────────────────────────
+#  Field Radar — your settings
+#  Edit this file in Notepad. Lines starting with # are notes.
+#  After editing, run run_radar.bat again to see the effect.
+# ─────────────────────────────────────────────────────────────
+
+[settings]
+days_back = 14            # how many days of items the dashboard shows
+fetch_days = 10           # how far back to look when fetching journals/preprints
+top_picks = 10            # how many "Top picks" to highlight
+min_score = 6.0           # items scoring below this are hidden (raise it = less noise)
+max_per_source = 15       # stops one busy news feed from flooding the dashboard
+notify = true             # Windows pop-up notification after each run
+open_dashboard = false    # open the dashboard in your browser after each run
+keep_days = 90            # older items are removed from the local database
+opportunity_days = 60     # PhD / conference listings stay visible this long
+summarizer = "none"       # "none" = free extracted description. (Future: "ollama" or "claude")
+
+# Optional: Crossref (journal database) asks callers to share a contact email
+# for its "polite" lane. Leave empty to stay anonymous — it still works.
+crossref_mailto = ""
+
+
+# ─────────────────────────────────────────────────────────────
+#  YOUR INTEREST AREAS
+#  strong = very specific phrases (worth more points)
+#  normal = broader words
+#  Matching is case-insensitive. Add or remove freely.
+# ─────────────────────────────────────────────────────────────
+
+[[interests]]
+id = "orgpsych"
+name = "Organizational Psychology & OB"
+icon = "🏢"
+strong = ["psychological safety", "employee engagement", "work engagement", "organizational identification",
+          "organisational identification", "organizational behavior", "organizational behaviour",
+          "organizational psychology", "organisational psychology", "industrial-organizational",
+          "work motivation", "workplace wellbeing", "workplace well-being", "employee wellbeing", "employee well-being",
+          "organizational development", "organisational development", "transformational leadership",
+          "servant leadership", "ethical leadership", "leader-member exchange", "job crafting", "burnout",
+          "job demands-resources", "organizational commitment", "organizational citizenship", "team climate",
+          "organizational culture", "organisational culture", "turnover intention", "self-determination theory",
+          "abusive supervision", "work-life balance", "change management", "organizational justice", "thriving at work"]
+normal = ["leadership", "leader", "employee", "workplace", "motivation", "wellbeing", "well-being", "engagement",
+          "teams", "teamwork", "manager", "supervisor", "job satisfaction", "stress at work", "occupational",
+          "organizational", "organisational", "culture", "retention", "commitment", "identity", "climate"]
+
+[[interests]]
+id = "lnd"
+name = "Learning & Development"
+icon = "🎓"
+strong = ["learning and development", "learning & development", "l&d", "corporate training", "training transfer",
+          "transfer of training", "instructional design", "adult learning", "andragogy", "facilitation",
+          "talent development", "leadership development", "workplace learning", "employee training",
+          "training effectiveness", "kirkpatrick", "learning experience platform", "microlearning",
+          "upskilling", "reskilling", "coaching", "mentoring", "onboarding", "training evaluation",
+          "human resource development", "skills-based", "learning culture", "experiential learning",
+          "simulation-based training", "e-learning", "elearning", "blended learning"]
+normal = ["training", "learning", "learner", "skills", "skill", "curriculum", "trainer", "workshop",
+          "development program", "competency", "competencies", "lms", "course", "capability"]
+
+[[interests]]
+id = "fow"
+name = "Future of Work"
+icon = "🔮"
+strong = ["future of work", "generation z", "hybrid work", "remote work", "return to office",
+          "return-to-office", "four-day week", "4-day week", "employee experience", "employee expectations",
+          "quiet quitting", "workforce trends", "ai and jobs", "jobs and ai", "automation of work", "gen z employees", "gen z workers", "gen z at work",
+          "gig economy", "flexible work", "work from home", "working from home", "great resignation",
+          "multigenerational workforce", "skills gap", "labor market", "labour market"]
+normal = ["gen z", "workforce", "hybrid", "remote", "employees", "jobs", "hiring", "workers", "talent",
+          "office", "careers", "younger workers", "trends", "culture"]
+
+[[interests]]
+id = "behsci"
+name = "Behavioral Science & Design"
+icon = "🧠"
+strong = ["behavioral science", "behavioural science", "behavioral economics", "behavioural economics",
+          "behavioral design", "behavioural design", "behavioral insights", "behavioural insights",
+          "nudge theory", "nudges", "nudging", "digital nudge", "behavioural nudge", "behavioral nudge", "choice architecture", "behavior change", "behaviour change", "habit formation",
+          "decision-making", "decision making", "cognitive bias", "heuristics", "default effect",
+          "loss aversion", "social norms", "intervention", "implementation intention", "present bias",
+          "com-b", "behavioural public policy", "behavioral public policy"]
+normal = ["behavior", "behaviour", "decision", "decisions", "bias", "habit", "habits", "incentive",
+          "persuasion", "judgment", "judgement", "choice", "norms", "experiment"]
+
+[[interests]]
+id = "ux"
+name = "UX Research & HCD"
+icon = "🧭"
+strong = ["ux research", "user research", "user experience", "human-computer interaction",
+          "human computer interaction", "hci", "human-centered design", "human-centred design",
+          "usability", "user testing", "design thinking", "persuasive technology", "dark patterns",
+          "cognitive load", "mental model", "user interviews", "service design", "accessibility",
+          "human-ai interaction", "human–ai interaction", "trust in ai", "user study"]
+normal = ["ux", "users", "user", "interface", "design", "prototype", "interaction", "usability", "survey",
+          "personas", "journey"]
+
+[[interests]]
+id = "research"
+name = "Research & Methods"
+icon = "📚"
+boost_only = true   # adds points to on-topic items; never makes an item relevant by itself
+strong = ["meta-analysis", "meta-analytic", "systematic review", "scoping review", "systematic literature review",
+          "longitudinal", "experience sampling", "diary study", "multilevel", "structural equation",
+          "measurement invariance", "scale development", "validation study", "preregistered", "pre-registered",
+          "replication", "open science", "mixed methods", "qualitative study", "thematic analysis",
+          "field experiment", "randomized controlled", "randomised controlled", "theory development",
+          "psychometric", "construct validity"]
+normal = ["study", "studies", "research", "theory", "theoretical", "framework", "evidence", "sample",
+          "method", "methods", "analysis", "measure", "scale", "review"]
+
+[[interests]]
+id = "ai"
+name = "AI in Psychology, HR & L&D"
+icon = "🤖"
+# strong = AI *applied* to people, work and learning. Generic AI words are only "normal",
+# so purely technical AI papers don't flood this tab.
+strong = ["ai in hr", "hr tech", "hr technology", "people analytics", "ai coach", "ai coaching", "ai tutor",
+          "ai-powered learning", "ai in learning", "ai for learning", "ai in l&d", "ai in education",
+          "algorithmic management", "ai adoption", "ai literacy", "ai skills", "ai upskilling",
+          "ai in recruitment", "ai in hiring", "ai and training", "human-ai collaboration", "human-ai teaming",
+          "ai at work", "workplace ai", "ai in the workplace", "ai and jobs", "ai and the workforce",
+          "trust in ai", "ai-assisted", "generative ai in", "genai in", "digital workforce", "superworker"]
+normal = ["ai", "artificial intelligence", "generative ai", "genai", "llm", "llms", "large language model",
+          "chatgpt", "claude", "gemini", "copilot", "chatbot", "ai agent", "ai agents", "machine learning",
+          "automation", "algorithm", "analytics", "digital", "technology", "tool", "tools"]
+
+
+[[interests]]
+id = "india"
+name = "India: Profession & Policy"
+icon = "🇮🇳"
+strong = ["ncahp", "national commission for allied and healthcare professions", "allied and healthcare professions",
+          "rehabilitation council of india", "rci", "psychologist registration", "registration of psychologists",
+          "mental healthcare act", "tele-manas", "national mental health programme", "ugc regulations",
+          "ugc guidelines", "ugc notification",
+          "icssr", "pmrf", "prime minister research fellowship", "national education policy", "nep 2020",
+          "indian workplace", "indian employees", "employees in india", "india inc", "nhrdn", "shrm india",
+          "indian psychology", "psychology in india", "mental health policy", "workplace mental health"]
+normal = ["india", "indian", "ministry", "notification", "regulation", "regulations", "guidelines", "policy",
+          "government", "bill", "act", "commission", "council", "psychologist", "psychologists", "mental health",
+          "higher education", "universities", "ugc"]
+
+
+# ─────────────────────────────────────────────────────────────
+#  OPPORTUNITY BOOSTERS (used for PhDs, conferences, calls)
+# ─────────────────────────────────────────────────────────────
+[opportunities]
+phd_words = ["phd", "ph.d", "doctoral", "doctorate", "doctoral candidate", "promovendus", "doktorand",
+             "phd student", "phd position", "phd candidate", "phd researcher", "early-stage researcher", "studentship"]
+funded_words = ["fully funded", "fully-funded", "funded", "salary", "salaried", "stipend", "scholarship",
+                "marie curie", "marie skłodowska", "msca", "employment contract", "paid position", "daad"]
+europe_words = ["netherlands", "germany", "belgium", "sweden", "denmark", "norway", "finland", "austria",
+                "switzerland", "spain", "italy", "portugal", "france", "ireland", "united kingdom", "uk",
+                "amsterdam", "leiden", "utrecht", "groningen", "rotterdam", "tilburg", "nijmegen", "maastricht",
+                "eindhoven", "ghent", "leuven", "brussels", "berlin", "munich", "hamburg", "cologne", "vienna",
+                "zurich", "copenhagen", "aarhus", "stockholm", "lund", "uppsala", "oslo", "bergen", "helsinki",
+                "europe", "european", "euraxess"]
+# A PhD listing must mention at least one of these to be shown
+phd_topics = ["psychology", "psychological", "behavioural", "behavioral", "organisational", "organizational",
+              "organisation", "organization", "management", "human resource", "hrm", "hrd", "learning", "education",
+              "educational", "training", "leadership", "work", "workplace", "employee", "employees", "wellbeing",
+              "well-being", "decision", "decision-making", "human-computer", "hci", "user experience", "ux",
+              "cognitive", "motivation", "careers", "career", "teams"]
+skip_words = ["professor", "lecturer", "postdoc", "postdoctoral", "assistant professor", "associate professor",
+              "senior lecturer", "chair in", "post-doctoral", "post doctoral", "research fellow"]   # academic jobs that are not PhD positions (shown lower)
+
+
+# ─────────────────────────────────────────────────────────────
+#  NOISE FILTER — headlines with these get pushed down
+# ─────────────────────────────────────────────────────────────
+[noise]
+fluff = ["tips", "ways to", "hacks", "secrets", "you need to know", "must-know", "motivational", "inspiring",
+         "inspirational", "quote", "quotes", "horoscope", "best tools for", "top 10", "top 5", "top 7",
+         "ultimate guide", "sponsored", "webinar recording", "giveaway", "listicle", "you won't believe",
+         "productivity hacks", "morning routine", "mindset shift", "free courses", "market outlook",
+         "market size", "market report", "cagr", "press release", "photos:", "wins award", "awards", "cut off", "cutoff", "admit card",
+         "answer key", "result date", "syllabus", "exam date", "exam dates", "eligibility criteria",
+         "registration begins", "registration starts", "registrations start", "registration last date",
+         "exam schedule", "application process", "how to apply"]
+off_topic = ["clinical psychology", "psychotherapy", "schizophrenia", "psychiatric", "autism", "adhd",
+             "anatomy", "neuroscience", "eeg", "rodent", "mice", "cancer", "covid", "football", "soccer",
+             "election", "stock market", "crypto", "sports psychology", "forensic", "child abuse",
+             "children", "adolescent", "adolescents", "infants", "suicide", "suicidal", "patients",
+             "dementia", "psychosis", "eating disorder", "substance use", "alcohol", "smoking cessation",
+             "stocks", "stock", "shares", "earnings", "nasdaq", "bitcoin", "btc", "sensex", "nifty",
+             "natural gas", "oil prices", "rate cut", "ipo", "retirement savings", "savings", "slang",
+             "tiktok", "dating", "travel", "fashion", "skincare", "celebrity", "netflix", "copyright",
+             "jailbreak", "adversarial", "physician", "nurses", "hospital"]

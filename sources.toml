@@ -1,0 +1,332 @@
+# ─────────────────────────────────────────────────────────────
+#  Field Radar — where to look (all free, no keys)
+#
+#  type    = rss | crossref | gnews | arxiv | psyarxiv
+#  kind    = what sort of evidence the source usually is:
+#            peer-reviewed | preprint | research-news | industry |
+#            practitioner | opinion | news | phd | cfp
+#  hint    = (optional) interest id this source leans towards
+#  filter  = true  → keep only items that match your keywords
+#            false → keep everything (source is already on-topic)
+#  enabled = false → switch a source off without deleting it
+#  region  = (Google News only) "IN" for the Indian edition; default is global
+#
+#  To add a source: copy a block, change name/url, save.
+# ─────────────────────────────────────────────────────────────
+
+
+# ── PEER-REVIEWED JOURNALS (via Crossref, the DOI registry) ──
+# New articles from the last `fetch_days`. Links go to the DOI.
+[[sources]]
+name = "Org Psych & OB journals"
+type = "crossref"
+kind = "peer-reviewed"
+hint = "orgpsych"
+filter = false
+issns = [
+  "0021-9010",  # Journal of Applied Psychology
+  "0031-5826",  # Personnel Psychology
+  "0894-3796",  # Journal of Organizational Behavior
+  "0963-1798",  # Journal of Occupational and Organizational Psychology
+  "1359-432X",  # European Journal of Work and Organizational Psychology
+  "0001-4273",  # Academy of Management Journal
+  "0749-5978",  # Organizational Behavior and Human Decision Processes
+  "1048-9843",  # The Leadership Quarterly
+  "0267-8373",  # Work & Stress
+  "1076-8998",  # Journal of Occupational Health Psychology
+  "0001-8791",  # Journal of Vocational Behavior
+  "0889-3268",  # Journal of Business and Psychology
+  "0269-994X",  # Applied Psychology: An International Review
+  "1059-6011",  # Group & Organization Management
+  "0018-7267",  # Human Relations
+  "2041-3866",  # Organizational Psychology Review
+]
+
+[[sources]]
+name = "L&D / HRD journals"
+type = "crossref"
+kind = "peer-reviewed"
+hint = "lnd"
+filter = false
+issns = [
+  "1044-8004",  # Human Resource Development Quarterly
+  "1534-4843",  # Human Resource Development Review
+  "1360-3736",  # International Journal of Training and Development
+  "1537-260X",  # Academy of Management Learning & Education
+  "1366-5626",  # Journal of Workplace Learning
+  "2046-9012",  # European Journal of Training and Development
+  "1350-5076",  # Management Learning
+  "0090-4848",  # Human Resource Management
+]
+
+[[sources]]
+name = "Behavioral science journals"
+type = "crossref"
+kind = "peer-reviewed"
+hint = "behsci"
+filter = true
+issns = [
+  "0894-3257",  # Journal of Behavioral Decision Making
+  "2398-063X",  # Behavioural Public Policy
+  "2397-3374",  # Nature Human Behaviour
+  "0033-2909",  # Psychological Bulletin (meta-analyses)
+]
+
+[[sources]]
+name = "HCI / UX journals"
+type = "crossref"
+kind = "peer-reviewed"
+hint = "ux"
+filter = true
+issns = [
+  "0747-5632",  # Computers in Human Behavior
+  "1071-5819",  # International Journal of Human-Computer Studies
+]
+
+
+# ── PREPRINTS (new research, not yet peer-reviewed) ──
+[[sources]]
+name = "PsyArXiv"
+type = "psyarxiv"
+kind = "preprint"
+filter = true
+
+[[sources]]
+name = "arXiv · Human-Computer Interaction"
+type = "arxiv"
+kind = "preprint"
+hint = "ux"
+filter = true
+url = "http://export.arxiv.org/api/query?search_query=cat:cs.HC+OR+cat:cs.CY&sortBy=submittedDate&sortOrder=descending&max_results=150"
+
+
+# ── RESEARCH NEWS ──
+[[sources]]
+name = "APS · Association for Psychological Science"
+type = "rss"
+kind = "research-news"
+filter = true
+url = "https://www.psychologicalscience.org/feed"
+
+[[sources]]
+name = "ScienceDaily · Psychology"
+type = "rss"
+kind = "research-news"
+filter = true
+url = "https://www.sciencedaily.com/rss/mind_brain/psychology.xml"
+
+[[sources]]
+name = "Behavioral Scientist"
+type = "rss"
+kind = "practitioner"
+hint = "behsci"
+filter = false
+url = "https://behavioralscientist.org/feed/"
+
+[[sources]]
+name = "Behavioural Insights Team"
+type = "rss"
+kind = "industry"
+hint = "behsci"
+filter = false
+url = "https://www.bi.team/feed/?post_type=publications"
+
+
+# ── PRACTICE & INDUSTRY ──
+[[sources]]
+name = "MIT Sloan Management Review"
+type = "rss"
+kind = "practitioner"
+filter = true
+url = "https://sloanreview.mit.edu/feed/"
+
+[[sources]]
+name = "Harvard Business Review"
+type = "rss"
+kind = "practitioner"
+filter = true
+url = "http://feeds.hbr.org/harvardbusiness"
+
+[[sources]]
+name = "Josh Bersin"
+type = "rss"
+kind = "industry"
+hint = "lnd"
+filter = true
+url = "https://joshbersin.com/feed/"
+
+[[sources]]
+name = "Training Industry"
+type = "rss"
+kind = "practitioner"
+hint = "lnd"
+filter = true
+url = "https://trainingindustry.com/feed/"
+
+[[sources]]
+name = "eLearning Industry"
+type = "rss"
+kind = "opinion"
+hint = "lnd"
+filter = true
+url = "https://elearningindustry.com/feed"
+
+[[sources]]
+name = "Nielsen Norman Group"
+type = "rss"
+kind = "practitioner"
+hint = "ux"
+filter = false
+url = "https://www.nngroup.com/feed/rss/"
+
+[[sources]]
+name = "UX Collective"
+type = "rss"
+kind = "opinion"
+hint = "ux"
+filter = true
+url = "https://uxdesign.cc/feed"
+
+
+# ── NEWS & REPORTS (Google News search — free RSS) ──
+# `query` uses Google News search syntax. when:7d = last 7 days.
+[[sources]]
+name = "News · Workplace psychology"
+type = "gnews"
+kind = "news"
+hint = "orgpsych"
+filter = true
+query = '("psychological safety" OR "employee engagement" OR "workplace wellbeing" OR "organizational psychology" OR "employee burnout") when:7d'
+
+[[sources]]
+name = "News · L&D and corporate training"
+type = "gnews"
+kind = "news"
+hint = "lnd"
+filter = true
+query = '("learning and development" OR "corporate training" OR "leadership development" OR upskilling OR "instructional design") when:7d'
+
+[[sources]]
+name = "News · Future of work"
+type = "gnews"
+kind = "news"
+hint = "fow"
+filter = true
+query = '("future of work" OR "Gen Z employees" OR "Gen Z workers" OR "hybrid work" OR "return to office" OR "employee experience" OR "four-day week") when:7d'
+
+[[sources]]
+name = "News · Behavioral science"
+type = "gnews"
+kind = "news"
+hint = "behsci"
+filter = true
+query = '("behavioral science" OR "behavioural science" OR "behavioral economics" OR "behavioural economics" OR "nudge theory" OR "behavioural insights" OR "behavior change" OR "behaviour change") -stocks -shares when:7d'
+
+[[sources]]
+name = "News · AI in HR and L&D"
+type = "gnews"
+kind = "news"
+hint = "ai"
+filter = true
+query = '("AI" ("HR" OR "L&D" OR "corporate learning" OR "people analytics" OR "workforce")) when:7d'
+
+[[sources]]
+name = "Reports · Workforce research"
+type = "gnews"
+kind = "industry"
+hint = "fow"
+filter = true
+query = '(Gallup OR CIPD OR SHRM OR Deloitte OR McKinsey OR "World Economic Forum" OR "Work Trend Index" OR "Workplace Learning Report") (report OR survey OR study) (employees OR workforce OR workplace) when:14d'
+
+
+# ── INDIA: PROFESSION & POLICY (Google News, Indian edition) ──
+[[sources]]
+name = "India · NCAHP & psychology regulation"
+type = "gnews"
+region = "IN"
+kind = "news"
+hint = "india"
+filter = true
+query = '(NCAHP OR "National Commission for Allied and Healthcare Professions" OR "Rehabilitation Council of India" OR "psychologists" (regulation OR registration OR guidelines)) when:30d'
+
+[[sources]]
+name = "India · UGC, research & fellowships"
+type = "gnews"
+region = "IN"
+kind = "news"
+hint = "india"
+filter = true
+query = '((UGC (PhD OR regulations OR fellowship OR "assistant professor")) OR ICSSR OR PMRF OR "research fellowship" India) when:30d'
+
+[[sources]]
+name = "India · Workplace & mental health policy"
+type = "gnews"
+region = "IN"
+kind = "news"
+hint = "india"
+filter = true
+query = '(India ("mental health" OR wellbeing OR workplace OR employees OR "L&D") (policy OR guidelines OR report OR survey OR study)) when:14d'
+
+
+# ── PhD & ACADEMIC OPPORTUNITIES ──
+# EURAXESS / jobs.ac.uk / Academic Positions have no working RSS,
+# so we find their official listings through Google News site search.
+[[sources]]
+name = "EURAXESS (EU official research jobs)"
+type = "gnews"
+kind = "phd"
+hint = "research"
+filter = false
+query = 'site:euraxess.ec.europa.eu (PhD OR doctoral) (psychology OR behavioural OR behavioral OR organizational OR organisational OR "human resource" OR management OR learning) when:30d'
+
+[[sources]]
+name = "jobs.ac.uk PhDs"
+type = "gnews"
+kind = "phd"
+hint = "research"
+filter = false
+query = 'site:jobs.ac.uk (PhD OR studentship) (psychology OR behavioural OR organisational OR "human resource" OR management OR education) when:30d'
+
+[[sources]]
+name = "Academic Positions"
+type = "gnews"
+kind = "phd"
+hint = "research"
+filter = false
+query = 'site:academicpositions.com PhD (psychology OR "organizational" OR "behavioral" OR "human resource") when:30d'
+
+[[sources]]
+name = "News · Funded PhD calls"
+type = "gnews"
+kind = "phd"
+hint = "research"
+filter = false
+query = '("PhD" OR "doctoral") ("fully funded" OR "Marie Curie" OR MSCA OR scholarship) (psychology OR "behavioural science" OR "organizational behavior" OR HRM OR "management") when:30d'
+
+
+# ── CONFERENCES & CALLS FOR PAPERS ──
+# WikiCFP is community-posted: some listings are low-quality or
+# predatory. Always check the organiser before submitting.
+[[sources]]
+name = "WikiCFP · Psychology"
+type = "rss"
+kind = "cfp"
+hint = "research"
+filter = false
+url = "http://www.wikicfp.com/cfp/rss?cat=psychology"
+
+[[sources]]
+name = "WikiCFP · Behavioral science"
+type = "rss"
+kind = "cfp"
+hint = "behsci"
+filter = false
+url = "http://www.wikicfp.com/cfp/rss?cat=behavioral%20science"
+
+[[sources]]
+name = "WikiCFP · HCI"
+type = "rss"
+kind = "cfp"
+hint = "ux"
+filter = false
+url = "http://www.wikicfp.com/cfp/rss?cat=HCI"

@@ -1,0 +1,60 @@
+# Field Radar in the cloud (GitHub Actions, free for public repositories).
+# Runs 3 times a day and publishes the dashboard with GitHub Pages.
+# Times are in UTC: 02:30 / 07:30 / 12:30 UTC = 8:00 AM / 1:00 PM / 6:00 PM India time.
+# (GitHub may start scheduled runs a few minutes late — that's normal.)
+name: Field Radar
+
+on:
+  schedule:
+    - cron: "30 2 * * *"
+    - cron: "30 7 * * *"
+    - cron: "30 12 * * *"
+  push:
+    branches: [main]
+  workflow_dispatch:   # adds a "Run workflow" button on the Actions tab
+
+permissions:
+  contents: write      # to save the memory file (data/radar.db) after each run
+  pages: write
+  id-token: write
+
+concurrency:
+  group: field-radar
+  cancel-in-progress: false
+
+jobs:
+  radar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch updates and build dashboard
+        run: python radar.py --no-notify
+
+      - name: Remember what was seen (commit the small database)
+        run: |
+          git config user.name "field-radar-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/radar.db
+          git commit -m "Radar update $(date -u +'%Y-%m-%d %H:%M') UTC" || echo "No changes"
+          git pull --rebase --autostash || true
+          git push || echo "Push skipped"
+
+      - name: Prepare web page
+        run: |
+          mkdir -p site
+          cp dashboard.html site/index.html
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deploy
+        uses: actions/deploy-pages@v4

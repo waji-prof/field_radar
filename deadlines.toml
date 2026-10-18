@@ -1,0 +1,109 @@
+# ─────────────────────────────────────────────────────────────
+#  Field Radar — your deadline tracker (you keep this one)
+#
+#  Field Radar also finds deadlines automatically inside PhD and
+#  call-for-papers listings. This file is for the ones you care
+#  about most. Dates are left empty on purpose: open the official
+#  link, check the current date, and fill it in as YYYY-MM-DD.
+#  Entries without a date appear under "Dates to confirm".
+#
+#  type = conference | phd | funding | other
+# ─────────────────────────────────────────────────────────────
+
+# ── Conferences ──
+[[deadline]]
+title = "EAWOP Congress (European Association of Work & Organizational Psychology)"
+type = "conference"
+what = "Abstract submission"
+date = ""
+url = "https://www.eawop.org/"
+notes = "The key European W/O psychology congress. Great for PhD networking in Europe."
+
+[[deadline]]
+title = "SIOP Annual Conference"
+type = "conference"
+what = "Submission deadline"
+date = ""
+url = "https://www.siop.org/"
+notes = "Society for Industrial and Organizational Psychology (USA)."
+
+[[deadline]]
+title = "Academy of Management (AOM) Annual Meeting"
+type = "conference"
+what = "Paper / symposium submission"
+date = ""
+url = "https://aom.org/"
+notes = "OB division and Management Education & Development (MED) division."
+
+[[deadline]]
+title = "AHRD — Academy of Human Resource Development conference"
+type = "conference"
+what = "Paper submission"
+date = ""
+url = "https://www.ahrd.org/"
+notes = "Core HRD / L&D research community."
+
+[[deadline]]
+title = "UFHRD — University Forum for HRD conference (Europe)"
+type = "conference"
+what = "Paper submission"
+date = ""
+url = "https://www.ufhrd.co.uk/"
+notes = "European HRD research conference."
+
+[[deadline]]
+title = "National Academy of Psychology (NAOP) India — annual convention"
+type = "conference"
+what = "Abstract submission"
+date = ""
+url = "https://www.naopindia.org/"
+notes = "Accessible Indian option for presenting research."
+
+[[deadline]]
+title = "ACM CHI Conference on Human Factors in Computing Systems"
+type = "conference"
+what = "Paper submission"
+date = ""
+url = "https://chi.acm.org/"
+notes = "Top HCI / UX research venue (also has late-breaking work track)."
+
+[[deadline]]
+title = "SPUDM — European conference on judgment & decision making"
+type = "conference"
+what = "Abstract submission"
+date = ""
+url = "https://eadm.eu/"
+notes = "European Association for Decision Making. Behavioural science research."
+
+# ── PhD & funding programmes (Indian citizens eligible) ──
+[[deadline]]
+title = "Commonwealth PhD Scholarships (UK)"
+type = "funding"
+what = "Application deadline"
+date = ""
+url = "https://cscuk.fcdo.gov.uk/scholarships/"
+notes = "Fully funded UK PhD scholarships for citizens of Commonwealth countries, including India."
+
+[[deadline]]
+title = "DAAD Research Grants — Doctoral Programmes in Germany"
+type = "funding"
+what = "Application deadline"
+date = ""
+url = "https://www2.daad.de/deutschland/stipendium/datenbank/en/21148-scholarship-database/"
+notes = "Search the DAAD database for doctoral grants open to Indian applicants."
+
+[[deadline]]
+title = "Marie Skłodowska-Curie Doctoral Networks (EU)"
+type = "phd"
+what = "Position deadlines vary"
+date = ""
+url = "https://euraxess.ec.europa.eu/jobs/search"
+notes = "Salaried PhD positions across Europe; search EURAXESS for 'MSCA' + psychology."
+
+[[deadline]]
+title = "Netherlands PhD vacancies (salaried positions)"
+type = "phd"
+what = "Rolling vacancies"
+date = ""
+url = "https://www.academictransfer.com/en/jobs/?q=psychology+phd"
+notes = "Dutch PhDs are paid jobs. Check Tilburg, Utrecht, Groningen, Amsterdam, Leiden, Erasmus."

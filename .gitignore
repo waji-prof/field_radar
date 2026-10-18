@@ -1,0 +1,6 @@
+# Built fresh on every run
+dashboard.html
+site/
+data/last_run.log
+__pycache__/
+*.pyc
