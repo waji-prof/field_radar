@@ -51,7 +51,23 @@ def _deadlines(items, manual):
     return rows, unknown
 
 
-def build(path, items, config, manual_deadlines, meta):
+MEDIA_FIELDS = ["id", "title", "link", "source", "published", "first_seen", "day", "media_tab",
+                "evidence", "tags", "score"]
+
+# One-tap searches on PhD portals (shown on the PhDs & Conferences tab)
+PORTALS = [
+    ("EURAXESS", "EU's official research jobs portal", "https://euraxess.ec.europa.eu/jobs/search"),
+    ("AcademicTransfer", "Netherlands — salaried PhDs", "https://www.academictransfer.com/en/jobs/?q=phd+psychology"),
+    ("Academic Positions", "Europe-wide academic jobs", "https://academicpositions.com/jobs/position/phd/field/psychology"),
+    ("FindAPhD", "UK & Europe PhD projects", "https://www.findaphd.com/phds/psychology/"),
+    ("jobs.ac.uk", "UK studentships", "https://www.jobs.ac.uk/search/?keywords=phd+psychology"),
+    ("DAAD", "Germany — scholarships & PhD programmes", "https://www2.daad.de/deutschland/stipendium/datenbank/en/21148-scholarship-database/"),
+    ("Scholarship Portal", "Funding search across Europe", "https://www.scholarshipportal.com/phd-scholarships"),
+    ("Commonwealth Scholarships", "UK PhDs for Indian citizens", "https://cscuk.fcdo.gov.uk/scholarships/"),
+]
+
+
+def build(path, items, config, manual_deadlines, meta, media=()):
     settings = config.get("settings", {})
     picks = pick_top(items, int(settings.get("top_picks", 10)))
     pick_ids = [p["id"] for p in picks]
@@ -65,6 +81,9 @@ def build(path, items, config, manual_deadlines, meta):
         "picks": pick_ids,
         "deadlines": deadlines,
         "unknown": unknown,
+        "media": [dict({k: m.get(k) for k in MEDIA_FIELDS}, **(m.get("media") or {}))
+                  for m in sorted(media, key=lambda m: (m.get("day") or "", m["score"]), reverse=True)],
+        "portals": [{"name": n, "note": d, "url": u} for n, d, u in PORTALS],
     }
     blob = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
     path.write_text(TEMPLATE.replace("__DATA__", blob), encoding="utf-8")
@@ -157,6 +176,34 @@ h2{font-size:18px;margin:26px 0 8px}
 .ok{color:var(--research)} .bad{color:var(--warn)}
 .legend div{margin:6px 0}
 .tablewrap{overflow-x:auto}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin:10px 0}
+.vcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+.vcard.watched .frame img{opacity:.55}
+.frame{position:relative;background:#000;aspect-ratio:16/9}
+.mgrid .frame{aspect-ratio:9/16}
+.frame img{width:100%;height:100%;object-fit:cover;display:block}
+.frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.play{position:absolute;inset:0;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.55))}
+.play span{width:54px;height:54px;border-radius:50%;background:rgba(0,0,0,.62);color:#fff;font-size:22px;
+      display:flex;align-items:center;justify-content:center;padding-left:4px}
+.dur{position:absolute;right:6px;bottom:6px;background:rgba(0,0,0,.78);color:#fff;font-size:12px;padding:1px 6px;border-radius:4px}
+.wtag{position:absolute;left:6px;top:6px;background:rgba(0,0,0,.7);color:#fff;font-size:11.5px;padding:1px 7px;border-radius:4px}
+.vmeta{padding:9px 11px 11px}
+.vmeta h3{margin:0 0 4px;font-size:15px;line-height:1.35}
+.mgrid .vmeta h3{font-size:13.5px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.vmeta .src{margin:0 0 4px;font-size:12.5px}
+.yt{font-size:12.5px;color:var(--muted)}
+.long{margin:12px 0}
+.pod{display:flex;gap:12px;align-items:flex-start;padding:12px 14px}
+.pod .ic{flex:none;width:46px;height:46px;border-radius:10px;background:var(--opp-bg);display:flex;align-items:center;justify-content:center;font-size:22px}
+.pod audio{width:100%;margin-top:8px}
+.daysep{font-size:15px;margin:22px 0 4px;color:var(--muted);font-weight:600}
+.done{text-align:center;color:var(--muted);padding:18px 10px;border:1px dashed var(--line);border-radius:12px;margin:14px 0}
+.portals{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin:6px 0 18px}
+.portal{display:block;text-decoration:none;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.portal b{display:block;font-size:14.5px}
+.portal span{color:var(--muted);font-size:12.5px}
 @media (max-width:600px){ th:nth-child(4),td:nth-child(4){display:none} .card{padding:12px} }
 </style>
 </head>
@@ -192,7 +239,7 @@ const mem = {
   get(k, d){ try{ return JSON.parse(localStorage.getItem('fr_'+k)) ?? d }catch(e){ return d } },
   set(k, v){ try{ localStorage.setItem('fr_'+k, JSON.stringify(v)) }catch(e){} }
 };
-let saved = new Set(mem.get('saved', [])), read = new Set(mem.get('read', []));
+let saved = new Set(mem.get('saved', [])), read = new Set(mem.get('read', [])), watched = new Set(mem.get('watched', []));
 let state = {tab: mem.get('tab', 'top'), q:'', ev:'all', sort:'score', newOnly:false};
 const AREA = Object.fromEntries(D.interests.map(i => [i.id, i]));
 const byId = Object.fromEntries(D.items.map(i => [i.id, i]));
@@ -219,6 +266,8 @@ function tabsList(){
   const count = id => D.items.filter(i => (i.tags || []).includes(id)).length;
   return [
     {id:'top', label:'⭐ Top picks', n: D.picks.length},
+    {id:'shorts', label:'📱 Shorts', n: D.media.filter(m => m.media_tab==='shorts' && !watched.has(m.id)).length},
+    {id:'longform', label:'🎬 Long-form', n: D.media.filter(m => m.media_tab==='longform' && !watched.has(m.id)).length},
     {id:'all', label:'All', n: D.items.length},
     ...D.interests.map(i => ({id:i.id, label:`${i.icon} ${i.name}`, n: count(i.id)})),
     {id:'deadlines', label:'⏰ Deadlines', n: D.deadlines.filter(d => d.days_left >= 0).length},
@@ -268,6 +317,73 @@ function list(items, intro){
   if (state.sort === 'date') items.sort((a,b) => (b.published||b.first_seen).localeCompare(a.published||a.first_seen));
   const head = intro ? `<p class="intro">${intro}</p>` : '';
   return head + (items.length ? items.map(card).join('') : `<div class="empty">Nothing here with the current filters.</div>`);
+}
+
+function dayLabel(day){
+  const d = new Date(day + 'T12:00:00'), t = new Date(); t.setHours(12,0,0,0);
+  const diff = Math.round((t - d) / 864e5);
+  return diff === 0 ? 'Today' : diff === 1 ? 'Yesterday' : d.toLocaleDateString(undefined, {weekday:'long', day:'numeric', month:'short'});
+}
+function videoCard(m, vertical){
+  const w = watched.has(m.id);
+  const meta = [m.source, m.duration, m.views].filter(Boolean).map(esc).join(' · ');
+  const tags = (m.tags||[]).filter(t => AREA[t]).slice(0,2).map(t => `<span class="flag">${AREA[t].icon} ${esc(AREA[t].name)}</span>`).join('');
+  return `<article class="vcard ${vertical?'':'long'} ${w?'watched':''}" data-mid="${m.id}" data-vid="${esc(m.video_id)}">
+    <div class="frame"><img loading="lazy" src="${esc(m.thumb)}" alt="">
+      ${m.duration && !vertical ? `<span class="dur">${esc(m.duration)}</span>` : ''}${w ? '<span class="wtag">✓ Watched</span>' : ''}
+      <button class="play" aria-label="Play"><span>▶</span></button></div>
+    <div class="vmeta"><h3>${esc(m.title)}</h3><div class="src">${meta}</div>
+      ${vertical ? '' : `<div class="tags">${tags}</div>`}
+      <a class="yt" href="${esc(m.link)}" target="_blank" rel="noopener">Open in YouTube ↗</a></div></article>`;
+}
+function podCard(m){
+  const w = watched.has(m.id);
+  const meta = [m.source, m.duration, fmt(m.published || m.first_seen)].filter(Boolean).map(esc).join(' · ');
+  return `<article class="vcard long pod ${w?'watched':''}" data-mid="${m.id}"><div class="ic">🎧</div>
+    <div style="flex:1;min-width:0"><span class="pill g-opportunity">Podcast</span>${w?' <span class="flag">✓ Listened</span>':''}
+      <h3 style="margin:6px 0 2px;font-size:15.5px">${esc(m.title)}</h3><div class="src">${meta}</div>
+      <audio controls preload="none" src="${esc(m.audio)}"></audio></div></article>`;
+}
+function mediaView(tab){
+  const list = D.media.filter(m => m.media_tab === tab);
+  const limit = tab === 'shorts' ? 'short videos' : 'videos & podcasts';
+  if (!list.length) return `<div class="empty">No ${limit} yet — they appear after the next run.</div>`;
+  const days = [...new Set(list.map(m => m.day))];
+  let h = `<p class="intro">${tab === 'shorts'
+      ? 'Up to 20 short videos a day from channels in your field. Tap ▶ to watch right here.'
+      : 'Up to 10 talks, interviews and podcasts a day. Tap ▶ to watch or listen right here.'}</p>`;
+  days.forEach((day, n) => {
+    const items = list.filter(m => m.day === day);
+    h += `<div class="daysep">${dayLabel(day)} · ${items.length}</div>`;
+    h += tab === 'shorts' ? `<div class="mgrid">${items.map(m => videoCard(m, true)).join('')}</div>`
+                          : items.map(m => m.type === 'podcast' ? podCard(m) : videoCard(m, false)).join('');
+    if (n === 0) h += `<div class="done">That's all for ${dayLabel(day).toLowerCase()} ✓${days.length > 1 ? ' — earlier ones below, if you want to catch up' : ''}</div>`;
+  });
+  return h;
+}
+function portalsView(){
+  return `<h2 style="margin-top:6px">PhD portals — one tap</h2>
+    <p class="intro">Sites Field Radar can't fully read automatically. Open them directly for a complete search.</p>
+    <div class="portals">${D.portals.map(p => `<a class="portal" href="${esc(p.url)}" target="_blank" rel="noopener"><b>${esc(p.name)} ↗</b><span>${esc(p.note)}</span></a>`).join('')}</div>
+    <h2>Found for you</h2>`;
+}
+let playing = null;
+function stopPlaying(){
+  if (!playing) return;
+  playing.card.querySelector('.frame').innerHTML = playing.html;
+  playing = null;
+}
+function playVideo(card){
+  stopPlaying();
+  const frame = card.querySelector('.frame'), vid = card.dataset.vid;
+  playing = {card, html: frame.innerHTML};
+  frame.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(vid)}?autoplay=1&playsinline=1&rel=0&modestbranding=1"
+    allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="Video player"></iframe>`;
+  markWatched(card.dataset.mid);
+}
+function markWatched(id){
+  if (watched.has(id)) return;
+  watched.add(id); mem.set('watched', [...watched].slice(-3000)); renderTabs();
 }
 
 function deadlinesView(){
@@ -320,11 +436,14 @@ function aboutView(){
 function render(){
   renderTabs();
   const t = state.tab;
-  $('#controls').style.display = ['deadlines','about'].includes(t) ? 'none' : '';
+  stopPlaying();
+  $('#controls').style.display = ['deadlines','about','shorts','longform'].includes(t) ? 'none' : '';
   let h;
   if (t === 'top') h = list(D.picks.map(id => byId[id]).filter(Boolean),
       'The most relevant new items, with at most two per interest area. Ranked by keyword match, evidence strength, recency and deadlines.');
   else if (t === 'all') h = list(D.items.slice());
+  else if (t === 'shorts' || t === 'longform') h = mediaView(t);
+  else if (t === 'opportunities') h = portalsView() + list(D.items.filter(i => (i.tags||[]).includes(t)));
   else if (t === 'deadlines') h = deadlinesView();
   else if (t === 'about') h = aboutView();
   else if (t === 'saved') h = list(D.items.filter(i => saved.has(i.id)), 'Items you starred. Saved in this browser only.');
@@ -336,11 +455,17 @@ $('#tabs').addEventListener('click', e => { const b = e.target.closest('button')
   state.tab = b.dataset.tab; mem.set('tab', state.tab); render(); });
 $('#main').addEventListener('click', e => {
   const tag = e.target.closest('.tag'); if (tag){ state.tab = tag.dataset.tab; mem.set('tab', state.tab); render(); scrollTo(0,0); return; }
+  const pl = e.target.closest('.play'); if (pl){ playVideo(pl.closest('.vcard')); return; }
   const c = e.target.closest('.card'); if (!c) return;
   const id = c.dataset.id;
   if (e.target.closest('.save')){ saved.has(id) ? saved.delete(id) : saved.add(id); mem.set('saved', [...saved]); render(); return; }
   if (e.target.closest('h3 a')){ read.add(id); mem.set('read', [...read].slice(-3000)); c.classList.add('read'); }
 });
+document.addEventListener('play', e => {  // one audio at a time; mark podcasts as listened
+  document.querySelectorAll('audio').forEach(a => { if (a !== e.target) a.pause(); });
+  stopPlaying();
+  const c = e.target.closest && e.target.closest('.vcard'); if (c) markWatched(c.dataset.mid);
+}, true);
 $('#q').addEventListener('input', e => { state.q = e.target.value.trim(); render(); });
 $('#ev').addEventListener('change', e => { state.ev = e.target.value; render(); });
 $('#sort').addEventListener('change', e => { state.sort = e.target.value; render(); });

@@ -1,7 +1,8 @@
 # ─────────────────────────────────────────────────────────────
 #  Field Radar — where to look (all free, no keys)
 #
-#  type    = rss | crossref | gnews | arxiv | psyarxiv
+#  type    = rss | crossref | gnews | arxiv | psyarxiv | osf | podcast |
+#            youtube | academictransfer
 #  kind    = what sort of evidence the source usually is:
 #            peer-reviewed | preprint | research-news | industry |
 #            practitioner | opinion | news | phd | cfp
@@ -11,6 +12,7 @@
 #  enabled = false → switch a source off without deleting it
 #  region  = (Google News only) "IN" for the Indian edition; default is global
 #
+#  base    = (videos/podcasts) extra points for hand-picked channels
 #  To add a source: copy a block, change name/url, save.
 # ─────────────────────────────────────────────────────────────
 
@@ -268,6 +270,44 @@ filter = true
 query = '(India ("mental health" OR wellbeing OR workplace OR employees OR "L&D") (policy OR guidelines OR report OR survey OR study)) when:14d'
 
 
+# ── AI × PSYCHOLOGY & LEARNING (research) ──
+[[sources]]
+name = "AI & education journals"
+type = "crossref"
+kind = "peer-reviewed"
+hint = "aipsy"
+filter = true
+issns = [
+  "0360-1315",  # Computers & Education
+  "0007-1013",  # British Journal of Educational Technology
+  "2666-920X",  # Computers and Education: Artificial Intelligence
+  "1560-4292",  # International Journal of Artificial Intelligence in Education
+  "2949-8821",  # Computers in Human Behavior: Artificial Humans
+  "1096-7516",  # The Internet and Higher Education
+]
+
+[[sources]]
+name = "Educational psychology journals"
+type = "crossref"
+kind = "peer-reviewed"
+hint = "aipsy"
+filter = true
+issns = [
+  "1040-726X",  # Educational Psychology Review
+  "0959-4752",  # Learning and Instruction
+  "0022-0663",  # Journal of Educational Psychology
+  "0361-476X",  # Contemporary Educational Psychology
+]
+
+[[sources]]
+name = "EdArXiv"
+type = "osf"
+provider = "edarxiv"
+kind = "preprint"
+hint = "aipsy"
+filter = true
+
+
 # ── PhD & ACADEMIC OPPORTUNITIES ──
 # EURAXESS / jobs.ac.uk / Academic Positions have no working RSS,
 # so we find their official listings through Google News site search.
@@ -304,6 +344,24 @@ filter = false
 query = '("PhD" OR "doctoral") ("fully funded" OR "Marie Curie" OR MSCA OR scholarship) (psychology OR "behavioural science" OR "organizational behavior" OR HRM OR "management") when:30d'
 
 
+[[sources]]
+name = "AcademicTransfer (Netherlands, salaried PhDs)"
+type = "academictransfer"
+kind = "phd"
+hint = "research"
+filter = false
+queries = ["phd psychology", "phd education", "phd organisational behaviour", "phd behavioural science",
+           "phd learning sciences", "phd artificial intelligence education", "phd human resource management"]
+
+[[sources]]
+name = "AI × education PhD calls"
+type = "gnews"
+kind = "phd"
+hint = "aipsy"
+filter = false
+query = '("PhD position" OR "PhD studentship" OR "doctoral position" OR "doctoral researcher" OR "PhD scholarship" OR "fully funded PhD" OR "PhD candidate") ("artificial intelligence" OR "generative AI" OR AI) (education OR learning OR psychology OR "human-AI") when:30d'
+
+
 # ── CONFERENCES & CALLS FOR PAPERS ──
 # WikiCFP is community-posted: some listings are low-quality or
 # predatory. Always check the organiser before submitting.
@@ -330,3 +388,357 @@ kind = "cfp"
 hint = "ux"
 filter = false
 url = "http://www.wikicfp.com/cfp/rss?cat=HCI"
+
+
+# ── 📱🎬 VIDEOS (YouTube channel pages) ──
+# Shorts go to the Shorts tab, other videos to Long-form.
+# filter = true → only videos whose titles match your topics.
+# Find a channel's id: open the channel, View page source, search for "externalId".
+[[sources]]
+name = "Raj Shamani"
+type = "youtube"
+kind = "video"
+channel = "UCzwCEE_PchiBULMnAJqhGVg"
+filter = true
+base = 1.0
+
+[[sources]]
+name = "Nielsen Norman Group"
+type = "youtube"
+kind = "video"
+channel = "UC2oCugzU6W8-h95W7eBTUEg"
+hint = "ux"
+filter = false
+base = 3.0
+
+[[sources]]
+name = "Harvard Business Review"
+type = "youtube"
+kind = "video"
+channel = "UCWo4IA01TXzBeGJJKWHOG9g"
+hint = "orgpsych"
+filter = true
+base = 1.0
+
+[[sources]]
+name = "TED"
+type = "youtube"
+kind = "video"
+channel = "UCAuUUnT6oDeKwE6v1NGQxug"
+filter = true
+base = 0.0
+
+[[sources]]
+name = "Hidden Brain"
+type = "youtube"
+kind = "video"
+channel = "UCgjZeiV0Ks3Shx8xPgvm7pQ"
+hint = "behsci"
+filter = false
+base = 2.0
+
+[[sources]]
+name = "Academy of Management"
+type = "youtube"
+kind = "video"
+channel = "UCg8haGV_AQRMy_6oviF7SNQ"
+hint = "orgpsych"
+filter = false
+base = 2.0
+
+[[sources]]
+name = "Josh Bersin"
+type = "youtube"
+kind = "video"
+channel = "UCd_IFuZJRL83Ozy6mg-Y2NA"
+hint = "lnd"
+filter = false
+base = 2.0
+
+[[sources]]
+name = "Training Industry"
+type = "youtube"
+kind = "video"
+channel = "UCellAR1i9W12d9TyLJyQ3yA"
+hint = "lnd"
+filter = false
+base = 2.0
+
+[[sources]]
+name = "LinkedIn Learning"
+type = "youtube"
+kind = "video"
+channel = "UCikzJG7RbnNZhKLqqaXRM6A"
+hint = "lnd"
+filter = true
+base = 1.0
+
+[[sources]]
+name = "eLearning Industry"
+type = "youtube"
+kind = "video"
+channel = "UCgLLMAcIIxDk3XDlVflYGkQ"
+shorts = false   # their shorts are mostly self-promotion
+hint = "lnd"
+filter = true
+base = 1.0
+
+[[sources]]
+name = "Association for Psychological Science"
+type = "youtube"
+kind = "video"
+channel = "UCIkzmtnflLAZ2vAObULZbrQ"
+filter = true
+base = 1.0
+
+[[sources]]
+name = "The Psychology Podcast (Human Potential Lab)"
+type = "youtube"
+kind = "video"
+channel = "UCAvfZQ3r24F-V1JYqn2pfXg"
+filter = true
+base = 1.0
+
+[[sources]]
+name = "Gallup"
+type = "youtube"
+kind = "video"
+channel = "UCXFJpJ67IhxO34uY8nwrd9Q"
+hint = "fow"
+filter = true
+base = 1.0
+
+[[sources]]
+name = "World Economic Forum"
+type = "youtube"
+kind = "video"
+channel = "UCw-kH-Od73XDAt7qtH9uBYA"
+hint = "fow"
+filter = true
+base = 0.0
+
+[[sources]]
+name = "Wharton School"
+type = "youtube"
+kind = "video"
+channel = "UCU9Z1eLsDa_meEfsmx-Ys0w"
+hint = "orgpsych"
+filter = true
+base = 0.5
+
+[[sources]]
+name = "Stanford Graduate School of Business"
+type = "youtube"
+kind = "video"
+channel = "UCGwuxdEeCf0TIA2RbPOj-8g"
+hint = "orgpsych"
+filter = true
+base = 0.5
+
+[[sources]]
+name = "London Business School"
+type = "youtube"
+kind = "video"
+channel = "UCRPKXKBG8n6r6vIXoxsD2pQ"
+hint = "orgpsych"
+filter = true
+base = 0.5
+
+[[sources]]
+name = "INSEAD"
+type = "youtube"
+kind = "video"
+channel = "UC9aeQQ-NqjHS3nfiod2PMSA"
+hint = "orgpsych"
+filter = true
+base = 0.5
+
+[[sources]]
+name = "MIT Sloan School of Management"
+type = "youtube"
+kind = "video"
+channel = "UCaUvoQTl3-vcwSgcHQlvGKg"
+hint = "orgpsych"
+filter = true
+base = 0.5
+
+[[sources]]
+name = "Harvard Graduate School of Education"
+type = "youtube"
+kind = "video"
+channel = "UC1Up4TuDvGZraQUj9vxUaxQ"
+hint = "aipsy"
+filter = true
+base = 1.0
+
+[[sources]]
+name = "Edutopia"
+type = "youtube"
+kind = "video"
+channel = "UCdksaQxXH13BMeHo09MorBg"
+hint = "aipsy"
+filter = true
+base = 0.5
+
+[[sources]]
+name = "Google for Education"
+type = "youtube"
+kind = "video"
+channel = "UCt84aUC9OG6di8kSdKzEHTQ"
+hint = "aipsy"
+filter = true
+base = 0.0
+
+[[sources]]
+name = "Stanford HAI"
+type = "youtube"
+kind = "video"
+channel = "UChugFTK0KyrES9terTid8vA"
+hint = "ai"
+filter = true
+base = 0.5
+
+[[sources]]
+name = "DeepLearningAI"
+type = "youtube"
+kind = "video"
+channel = "UCcIXc5mJsHVYTZR1maL5l9w"
+hint = "ai"
+filter = true
+base = 0.0
+
+[[sources]]
+name = "Anthropic"
+type = "youtube"
+kind = "video"
+channel = "UCrDwWp7EBBv4NwvScIpBDOA"
+hint = "ai"
+filter = true
+base = 0.0
+
+[[sources]]
+name = "OpenAI"
+type = "youtube"
+kind = "video"
+channel = "UCXZCJLdBC09xxGZ6gcdrc6A"
+hint = "ai"
+filter = true
+base = 0.0
+
+[[sources]]
+name = "Big Think"
+type = "youtube"
+kind = "video"
+channel = "UCvQECJukTDE2i6aCoMnS-Vg"
+filter = true
+base = 0.0
+
+[[sources]]
+name = "ETHRWorld (Indian HR)"
+type = "youtube"
+kind = "video"
+channel = "UCAupiXL76_Fx55VTTJ_2jnA"
+hint = "india"
+filter = true
+base = 1.0
+
+
+# ── 🎧 PODCASTS (audio, plays in the Long-form tab) ──
+[[sources]]
+name = "HBR IdeaCast"
+type = "podcast"
+kind = "podcast"
+url = "http://feeds.harvardbusiness.org/harvardbusiness/ideacast"
+hint = "orgpsych"
+filter = false
+base = 2.0
+
+[[sources]]
+name = "Hidden Brain (podcast)"
+type = "podcast"
+kind = "podcast"
+url = "https://feeds.simplecast.com/kwWc0lhf"
+hint = "behsci"
+filter = false
+base = 2.0
+
+[[sources]]
+name = "Choiceology with Katy Milkman"
+type = "podcast"
+kind = "podcast"
+url = "https://feeds.schwab.com/choiceology"
+hint = "behsci"
+filter = false
+base = 2.0
+
+[[sources]]
+name = "ReThinking with Adam Grant"
+type = "podcast"
+kind = "podcast"
+url = "https://feeds.acast.com/public/shows/675858676d1777b3683ec351"
+hint = "orgpsych"
+filter = false
+base = 2.0
+
+[[sources]]
+name = "The Learning & Development Podcast"
+type = "podcast"
+kind = "podcast"
+url = "https://feeds.megaphone.fm/USVL4635269107"
+hint = "lnd"
+filter = false
+base = 2.0
+
+[[sources]]
+name = "The Mindtools L&D Podcast"
+type = "podcast"
+kind = "podcast"
+url = "https://rss.libsyn.com/shows/82191/destinations/383674.xml"
+hint = "lnd"
+filter = false
+base = 2.0
+
+[[sources]]
+name = "Behavioral Grooves"
+type = "podcast"
+kind = "podcast"
+url = "https://feed.podbean.com/behavioralgrooves/feed.xml"
+hint = "behsci"
+filter = false
+base = 2.0
+
+[[sources]]
+name = "The Psychology Podcast"
+type = "podcast"
+kind = "podcast"
+url = "https://rss.art19.com/the-psychology-podcast"
+hint = "orgpsych"
+filter = false
+base = 2.0
+
+[[sources]]
+name = "Squiggly Careers"
+type = "podcast"
+kind = "podcast"
+url = "https://feeds.megaphone.fm/APL9013254409"
+hint = "lnd"
+filter = false
+base = 2.0
+
+[[sources]]
+name = "NN/g UX Podcast"
+type = "podcast"
+kind = "podcast"
+url = "https://anchor.fm/s/2125a62c/podcast/rss"
+hint = "ux"
+filter = false
+base = 2.0
+
+[[sources]]
+name = "Coaching for Leaders"
+type = "podcast"
+kind = "podcast"
+url = "https://feeds.podcastmirror.com/coaching-for-leaders"
+hint = "lnd"
+filter = false
+base = 2.0

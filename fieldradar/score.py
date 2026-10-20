@@ -21,7 +21,11 @@ EVIDENCE = {
     "opinion":       ("Opinion / blog", 0.0, "news"),
     "phd":           ("PhD / research position", 0.0, "opportunity"),
     "cfp":           ("Conference / call for papers", 0.0, "opportunity"),
+    "short":         ("Short", 0.0, "media"),
+    "video":         ("Video", 0.0, "media"),
+    "podcast":       ("Podcast", 0.0, "media"),
 }
+MEDIA = {"short", "video", "podcast"}
 KIND_TO_EVIDENCE = {"peer-reviewed": "peer"}
 
 META = re.compile(r"meta-analy|meta analy|systematic (literature )?review|scoping review|umbrella review", re.I)
@@ -41,8 +45,10 @@ def _any(rxs, text):
 
 
 class Scorer:
-    def __init__(self, config):
+    def __init__(self, config, sources=()):
         self.settings = config.get("settings", {})
+        # `base` in sources.toml: extra points for hand-picked, always-on-topic channels/podcasts
+        self.source_base = {s["name"]: float(s.get("base", 0)) for s in sources}
         self.interests = [{
             "id": it["id"], "name": it["name"], "icon": it.get("icon", "•"),
             "strong": _rx(it.get("strong", [])), "normal": _rx(it.get("normal", [])),
@@ -118,14 +124,17 @@ class Scorer:
         boost = max((areas[k] for k in self.boost_only), default=0.0)
         relevance = best + 0.25 * sum(others) + (0.4 * boost if best >= 3 else 0.0)
 
-        if item.get("filter") and best < 3:
-            return None
-
         penalty = 0.0
         if _any(self.fluff, title.lower()) or LISTICLE.search(title):
             penalty -= 3.0
         if _any(self.off_topic, low):
             penalty -= 4.0
+
+        if kind in MEDIA:
+            return self._score_media(item, kind, areas, topical, best, best_id, relevance, penalty, now)
+
+        if item.get("filter") and best < 3:
+            return None
 
         ev_key, flags = self.evidence(kind, text)
         ev_label, ev_points, group = EVIDENCE[ev_key]
@@ -189,6 +198,7 @@ class Scorer:
         return {
             "score": round(total, 2),
             "primary": "opportunities" if ev_key in ("phd", "cfp") else best_id,
+            "media_tab": None,
             "tags": tags,
             "evidence": ev_key,
             "evidence_label": ev_label,
@@ -197,4 +207,38 @@ class Scorer:
             "deadline": deadline.date().isoformat() if deadline else None,
             "deadline_what": deadline_what,
             "days_left": days_left,
+        }
+
+    def _score_media(self, item, kind, areas, topical, best, best_id, relevance, penalty, now):
+        """Videos & podcasts: titles are short, so the bar is lower than for articles,
+        and hand-picked channels can carry a `base` bonus."""
+        base = self.source_base.get(item.get("source"), 0.0)
+        min_rel = float(self.settings.get("media_min_relevance", 2.0))
+        if item.get("filter") and best < min_rel:
+            return None
+        if penalty < 0:
+            return None  # promos ("webinar", "mini preview"…) and off-topic videos are dropped outright
+        when = item.get("published") or item.get("first_seen")
+        age_days = 3.0
+        if when:
+            try:
+                age_days = max(0.0, (now - datetime.fromisoformat(when)).total_seconds() / 86400)
+            except ValueError:
+                pass
+        recency = max(0.0, 2.0 - 0.15 * age_days)
+        total = relevance + base + recency + penalty
+        label, _, group = EVIDENCE[kind]
+        tags = [k for k, v in topical.items() if v >= min_rel]
+        return {
+            "score": round(total, 2),
+            "primary": "media",
+            "media_tab": "shorts" if kind == "short" else "longform",
+            "tags": tags,
+            "evidence": kind,
+            "evidence_label": label,
+            "group": group,
+            "flags": [],
+            "deadline": None,
+            "deadline_what": "",
+            "days_left": None,
         }

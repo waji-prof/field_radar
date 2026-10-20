@@ -14,6 +14,11 @@ notify = true             # Windows pop-up notification after each run
 open_dashboard = false    # open the dashboard in your browser after each run
 keep_days = 90            # older items are removed from the local database
 opportunity_days = 60     # PhD / conference listings stay visible this long
+shorts_per_day = 20       # 📱 Shorts tab: at most this many new shorts per day
+longform_per_day = 10     # 🎬 Long-form tab: at most this many new videos/podcasts per day
+media_per_channel = 4     # per day, so one channel can't fill a tab
+media_min_relevance = 2.0 # video titles are short, so the topic bar is lower than for articles
+timezone_hours = 5.5      # India time, used to decide what counts as "today"
 summarizer = "none"       # "none" = free extracted description. (Future: "ollama" or "claude")
 
 # Optional: Crossref (journal database) asks callers to share a contact email
@@ -41,7 +46,7 @@ strong = ["psychological safety", "employee engagement", "work engagement", "org
           "job demands-resources", "organizational commitment", "organizational citizenship", "team climate",
           "organizational culture", "organisational culture", "turnover intention", "self-determination theory",
           "abusive supervision", "work-life balance", "change management", "organizational justice", "thriving at work"]
-normal = ["leadership", "leader", "employee", "workplace", "motivation", "wellbeing", "well-being", "engagement",
+normal = ["psychology", "psychologist", "leadership", "leader", "employee", "workplace", "motivation", "wellbeing", "well-being", "engagement",
           "teams", "teamwork", "manager", "supervisor", "job satisfaction", "stress at work", "occupational",
           "organizational", "organisational", "culture", "retention", "commitment", "identity", "climate"]
 
@@ -111,8 +116,30 @@ normal = ["study", "studies", "research", "theory", "theoretical", "framework", 
           "method", "methods", "analysis", "measure", "scale", "review"]
 
 [[interests]]
+id = "aipsy"
+name = "AI × Psychology & Learning"
+icon = "🧪"
+# Research where AI meets learning, education and the psychology of work.
+strong = ["generative ai in education", "genai in education", "ai in education", "artificial intelligence in education",
+          "ai in higher education", "chatgpt in education", "llms in education", "ai tutor", "ai tutors", "ai tutoring",
+          "intelligent tutoring", "ai-assisted learning", "ai-supported learning", "ai-generated feedback", "ai feedback",
+          "automated feedback", "cognitive offloading", "self-regulated learning", "metacognition", "metacognitive",
+          "academic integrity", "ai literacy", "learning analytics", "adaptive learning", "educational technology",
+          "technology-enhanced learning", "edtech", "algorithm aversion", "algorithm appreciation", "automation bias",
+          "trust in ai", "trust in automation", "human-ai collaboration", "human-ai interaction", "human-ai teaming",
+          "human–ai", "ai anxiety", "technostress", "ai acceptance", "technology acceptance", "ai adoption",
+          "attitudes towards ai", "attitudes toward ai", "ai attitudes", "silicon samples", "llms as participants",
+          "large language models in psychology", "llm-based", "chatbot-based", "conversational agent", "pedagogical agent",
+          "ai coaching", "ai and learning", "ai and education", "ai in teaching", "teachers and ai", "students and ai",
+          "students' use of", "chatgpt use", "generative ai use", "ai-assisted writing", "deskilling"]
+normal = ["ai", "artificial intelligence", "generative ai", "genai", "chatgpt", "llm", "llms", "large language model",
+          "chatbot", "students", "learners", "learning", "teaching", "teachers", "education", "educational",
+          "psychology", "cognitive", "motivation", "university", "classroom"]
+
+
+[[interests]]
 id = "ai"
-name = "AI in Psychology, HR & L&D"
+name = "AI in HR & L&D"
 icon = "🤖"
 # strong = AI *applied* to people, work and learning. Generic AI words are only "normal",
 # so purely technical AI papers don't flood this tab.
@@ -159,10 +186,12 @@ europe_words = ["netherlands", "germany", "belgium", "sweden", "denmark", "norwa
                 "europe", "european", "euraxess"]
 # A PhD listing must mention at least one of these to be shown
 phd_topics = ["psychology", "psychological", "behavioural", "behavioral", "organisational", "organizational",
-              "organisation", "organization", "management", "human resource", "hrm", "hrd", "learning", "education",
-              "educational", "training", "leadership", "work", "workplace", "employee", "employees", "wellbeing",
-              "well-being", "decision", "decision-making", "human-computer", "hci", "user experience", "ux",
-              "cognitive", "motivation", "careers", "career", "teams"]
+              "organisation", "organization", "human resource", "hrm", "hrd", "education", "educational",
+              "learning sciences", "learning and development", "workplace learning", "e-learning", "training",
+              "leadership", "workplace", "employee", "employees", "wellbeing", "well-being", "judgment and decision",
+              "behavioural decision", "behavioral decision", "human-computer", "hci", "user experience", "ux",
+              "cognitive", "motivation", "careers", "career", "teams", "human-ai", "edtech", "educational technology",
+              "management and organisation", "management and organization", "business school"]
 skip_words = ["professor", "lecturer", "postdoc", "postdoctoral", "assistant professor", "associate professor",
               "senior lecturer", "chair in", "post-doctoral", "post doctoral", "research fellow"]   # academic jobs that are not PhD positions (shown lower)
 
@@ -178,11 +207,12 @@ fluff = ["tips", "ways to", "hacks", "secrets", "you need to know", "must-know",
          "market size", "market report", "cagr", "press release", "photos:", "wins award", "awards", "cut off", "cutoff", "admit card",
          "answer key", "result date", "syllabus", "exam date", "exam dates", "eligibility criteria",
          "registration begins", "registration starts", "registrations start", "registration last date",
-         "exam schedule", "application process", "how to apply"]
+         "exam schedule", "application process", "how to apply", "upcoming webinar", "webinar", "subscribe", "newsletter", "have your say", "mini preview", "tips",
+         "on-demand sessions", "register now", "sign up now", "trailer", "teaser", "coming soon", "live now"]
 off_topic = ["clinical psychology", "psychotherapy", "schizophrenia", "psychiatric", "autism", "adhd",
              "anatomy", "neuroscience", "eeg", "rodent", "mice", "cancer", "covid", "football", "soccer",
              "election", "stock market", "crypto", "sports psychology", "forensic", "child abuse",
-             "children", "adolescent", "adolescents", "infants", "suicide", "suicidal", "patients",
+             "infants", "suicide", "suicidal", "patients",
              "dementia", "psychosis", "eating disorder", "substance use", "alcohol", "smoking cessation",
              "stocks", "stock", "shares", "earnings", "nasdaq", "bitcoin", "btc", "sensex", "nifty",
              "natural gas", "oil prices", "rate cut", "ipo", "retirement savings", "savings", "slang",

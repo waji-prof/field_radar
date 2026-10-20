@@ -1,5 +1,6 @@
 """Local SQLite database (a single file in data/) that remembers what you've seen."""
 import hashlib
+import json
 import sqlite3
 from datetime import datetime, timedelta, timezone
 
@@ -35,6 +36,9 @@ class Store:
         self.db = sqlite3.connect(path)
         self.db.row_factory = sqlite3.Row
         self.db.executescript(SCHEMA)
+        cols = {r[1] for r in self.db.execute("PRAGMA table_info(items)")}
+        if "media" not in cols:  # added for videos & podcasts (older databases lack it)
+            self.db.execute("ALTER TABLE items ADD COLUMN media TEXT")
 
     @staticmethod
     def _keys(item):
@@ -54,10 +58,11 @@ class Store:
         iid, tnorm = self._keys(item)
         self.db.execute(
             "INSERT INTO items (id,title,title_norm,link,summary,ai_summary,source,venue,kind,hint,filter,"
-            "published,first_seen) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            "published,first_seen,media) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (iid, item["title"], tnorm, link, item.get("summary", ""), item.get("ai_summary"),
              item["source"], item.get("venue", ""), item["kind"], item.get("hint", ""),
-             1 if item.get("filter") else 0, item.get("published"), now.isoformat()))
+             1 if item.get("filter") else 0, item.get("published"), now.isoformat(),
+             json.dumps(item["media"]) if item.get("media") else None))
 
     def recent(self, days):
         since = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()

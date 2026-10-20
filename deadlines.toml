@@ -107,3 +107,36 @@ what = "Rolling vacancies"
 date = ""
 url = "https://www.academictransfer.com/en/jobs/?q=psychology+phd"
 notes = "Dutch PhDs are paid jobs. Check Tilburg, Utrecht, Groningen, Amsterdam, Leiden, Erasmus."
+
+# ── AI × Psychology & Learning conferences ──
+[[deadline]]
+title = "EARLI Conference (European Association for Research on Learning and Instruction)"
+type = "conference"
+what = "Submission deadline"
+date = ""
+url = "https://www.earli.org/"
+notes = "Europe's main learning-sciences & educational psychology community. Has a strong AI & technology SIG and a JURE network for early-career researchers."
+
+[[deadline]]
+title = "EC-TEL — European Conference on Technology Enhanced Learning"
+type = "conference"
+what = "Paper submission"
+date = ""
+url = "https://ea-tel.eu/ectel"
+notes = "European venue for technology & AI in learning."
+
+[[deadline]]
+title = "AIED — International Conference on Artificial Intelligence in Education"
+type = "conference"
+what = "Paper submission"
+date = ""
+url = "https://iaied.org/"
+notes = "Core AI-in-education research conference (International AIED Society)."
+
+[[deadline]]
+title = "LAK — Learning Analytics & Knowledge Conference"
+type = "conference"
+what = "Paper submission"
+date = ""
+url = "https://www.solaresearch.org/events/lak/"
+notes = "Society for Learning Analytics Research — data & AI for understanding learning."

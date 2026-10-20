@@ -1,8 +1,11 @@
 # Field Radar
 
 A free daily briefing for **Applied & Organizational Psychology, L&D, Future of Work,
-Behavioral Science, UX research, research methods, and AI in HR/L&D**, plus a
-PhD and conference deadline tracker.
+Behavioral Science, UX research, research methods, AI × Psychology & Learning, AI in HR/L&D,
+and Indian profession & policy news**, plus **Shorts and Long-form video tabs**, podcasts,
+and a PhD and conference deadline tracker.
+
+**Online (phone):** https://waji-prof.github.io/field_radar/, updated 3× a day by GitHub Actions (free).
 
 - **Cost: ₹0.** No API keys, no subscriptions, no hosting, nothing to buy.
 - **Runs on your own PC** using Python (free, open source) and only Python's built-in parts,
@@ -52,12 +55,29 @@ You don't have to keep it running all day.
 | **Research news** | APS (Association for Psychological Science), ScienceDaily Psychology |
 | **Practice & industry** | MIT Sloan Management Review, Harvard Business Review, Josh Bersin, Training Industry, Behavioural Insights Team, Behavioral Scientist, Nielsen Norman Group, eLearning Industry, UX Collective |
 | **News & reports** | Google News searches for each interest area, plus workforce reports (Gallup, CIPD, SHRM, Deloitte, McKinsey, WEF, Microsoft, LinkedIn) |
-| **PhD positions** | EURAXESS (EU official), jobs.ac.uk, Academic Positions, funded-PhD news |
+| **PhD positions** | AcademicTransfer (read directly), EURAXESS, jobs.ac.uk, Academic Positions (via Google News), funded-PhD and AI-in-education PhD news, plus one-tap **PhD portals** buttons on the PhDs tab |
+| **AI × Psychology & Learning** | Computers & Education, BJET, Computers & Education: AI, IJAIED, CHB: Artificial Humans, Internet & Higher Education, Educational Psychology Review, Learning & Instruction, J. Educational Psychology, Contemporary Educational Psychology, EdArXiv |
+| **India** | NCAHP, RCI, UGC, ICSSR/PMRF, workplace & mental-health policy (Google News, Indian edition) |
+| **Videos & podcasts** | 28 YouTube channels (e.g. Raj Shamani, NN/g, HBR, Hidden Brain, AOM, Josh Bersin, Training Industry, Harvard GSE, Stanford HAI, ETHRWorld) and 11 podcasts (HBR IdeaCast, Hidden Brain, Choiceology, ReThinking, The L&D Podcast, Mindtools L&D, Behavioral Grooves, The Psychology Podcast, Squiggly Careers, NN/g UX Podcast, Coaching for Leaders) |
 | **Conferences** | WikiCFP (psychology, behavioral science, HCI), plus your own list in `deadlines.toml` |
 
 Edit or add sources in **`sources.toml`**. Each source is a small block you can copy.
 
 ---
+
+## 📱 Shorts and 🎬 Long-form
+
+- **Shorts:** up to 20 short videos a day (including any video under 3 minutes).
+  **Long-form:** up to 10 talks, interviews and podcasts a day. Change the limits with `shorts_per_day` / `longform_per_day` in `config.toml`.
+- Videos **play inside the dashboard**, without YouTube's recommendations rabbit hole. Podcasts have a ▶ audio player.
+- Unwatched items stay for 14 days under "Earlier". Played items get **✓ Watched** (saved per device).
+- Videos come from hand-picked YouTube channels and podcasts in `sources.toml` (`type = "youtube"` / `"podcast"`).
+  YouTube blocks its RSS feeds for automated tools, so Field Radar reads each channel's public Videos and Shorts pages instead.
+  If a channel redesign breaks this, the Sources tab shows ✗.
+- **Add a channel:** open the channel on YouTube → right-click → *View page source* → search for `externalId`
+  → copy the `UC…` id into a new `[[sources]]` block (copy an existing YouTube block).
+  `filter = true` keeps only videos matching your topics; `base` gives a favourite channel extra points.
+- Instagram Reels, TikTok and LinkedIn can't be included: they offer no public feed and block automated reading.
 
 ## Reading the dashboard
 
@@ -111,8 +131,9 @@ Items under `min_score` are hidden, and each source shows at most `max_per_sourc
   the feed snippet for blogs. Google News items have no description, only the headline.
 - **Some journals (often Elsevier) don't share abstracts** through Crossref, so those cards show
   only the title and link.
-- **PhD sites like EURAXESS and jobs.ac.uk have no working RSS feed**, so Field Radar finds their
-  listings through Google News. It catches many but not all positions. Still check the portals directly now and then.
+- **EURAXESS and jobs.ac.uk have no working RSS feed**, and EURAXESS's search can't be read reliably,
+  so Field Radar finds their listings through Google News. It catches many but not all positions. Use the
+  one-tap **PhD portals** buttons for a complete search now and then.
 - **Deadlines are found automatically only when a listing writes them out**
   ("Apply by 2 December 2026"). WikiCFP shows **event dates**, not submission deadlines.
 - **WikiCFP is community-posted.** Some conferences listed there are low quality or predatory.

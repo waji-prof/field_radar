@@ -6,13 +6,14 @@
     python radar.py --no-notify  skip the Windows pop-up
 """
 import argparse
+import json
 import sys
 import tomllib
 import traceback
 import webbrowser
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -44,6 +45,37 @@ def too_old(item, settings, now):
     is_opp = item["kind"] in ("phd", "cfp")
     days = int(settings.get("opportunity_days", 60)) if is_opp else int(settings.get("days_back", 14))
     return (now - datetime.fromisoformat(item["published"])).days > days
+
+
+def seconds(duration):
+    """'2:16:13' → 8173; '' → 0."""
+    try:
+        total = 0
+        for part in (duration or "").split(":"):
+            total = total * 60 + int(part)
+        return total
+    except ValueError:
+        return 0
+
+
+def pick_media(items, settings):
+    """Daily limits for the video tabs: each day keeps its best N shorts and N long-form
+    items (max a few per channel), so the tabs end instead of scrolling forever."""
+    tz = timedelta(hours=float(settings.get("timezone_hours", 5.5)))
+    limits = {"shorts": int(settings.get("shorts_per_day", 20)),
+              "longform": int(settings.get("longform_per_day", 10))}
+    per_channel = int(settings.get("media_per_channel", 4))
+    used, per_chan, out = Counter(), Counter(), []
+    for it in sorted(items, key=lambda i: i["score"], reverse=True):
+        day = (datetime.fromisoformat(it["first_seen"]) + tz).date().isoformat()
+        tab = it["media_tab"]
+        if used[(day, tab)] >= limits[tab] or per_chan[(day, tab, it["source"])] >= per_channel:
+            continue
+        used[(day, tab)] += 1
+        per_chan[(day, tab, it["source"])] += 1
+        it["day"] = day
+        out.append(it)
+    return out
 
 
 def fetch_all(sources, settings, db, now):
@@ -100,15 +132,25 @@ def main():
     latest_run = runs[0]["at"] if runs else now.isoformat()
     pool = {r["id"]: r for r in db.recent(int(settings.get("days_back", 14)))}
     pool.update({r["id"]: r for r in db.opportunities(int(settings.get("opportunity_days", 60)))})
-    scorer = score.Scorer(config)
+    scorer = score.Scorer(config, sources)
     min_score = float(settings.get("min_score", 3.0))
-    scored = []
+    media_min = float(settings.get("media_min_score", 3.5))
+    scored, media = [], []
     for it in pool.values():
         info = scorer.score(it, now)
-        if info and info["score"] >= min_score:
-            it.update(info)
-            it["is_new"] = it["first_seen"] >= latest_run
+        if not info:
+            continue
+        it.update(info)
+        it["is_new"] = it["first_seen"] >= latest_run
+        if info["media_tab"]:
+            if info["score"] >= media_min:
+                it["media"] = json.loads(it["media"]) if it.get("media") else {}
+                if it["kind"] == "video" and 0 < seconds(it["media"].get("duration")) < 180:
+                    it["media_tab"] = "shorts"  # under 3 minutes: belongs with the shorts
+                media.append(it)
+        elif info["score"] >= min_score:
             scored.append(it)
+    media = pick_media(media, settings)
     # Keep only the best N per source so a busy feed can't drown the rest,
     # and drop near-duplicate headlines (same story from several newspapers)
     cap, per_source, shown, seen_words = int(settings.get("max_per_source", 15)), Counter(), [], []
@@ -127,7 +169,7 @@ def main():
         "sources": sorted(status, key=lambda s: (s["ok"], s["name"])),
         "new_total": new_total,
     }
-    picks = dashboard.build(DASHBOARD, shown, config, manual_deadlines, meta)
+    picks = dashboard.build(DASHBOARD, shown, config, manual_deadlines, meta, media)
 
     new_shown = [i for i in shown if i["is_new"]]
     soon = sorted((i for i in shown if i.get("days_left") is not None and i["days_left"] <= 14),
@@ -136,6 +178,8 @@ def main():
         f"Field Radar · {now.astimezone():%d %b %Y %H:%M}",
         f"Sources OK: {sum(s['ok'] for s in status)}/{len(status)}" if status else "Offline rebuild",
         f"New items stored: {new_total} · Shown on dashboard: {len(shown)} · New & relevant: {len(new_shown)}",
+        f"Videos: {sum(m['media_tab'] == 'shorts' for m in media)} shorts · "
+        f"{sum(m['media_tab'] == 'longform' for m in media)} long-form",
         f"Dashboard: {DASHBOARD}",
     ]
     lines += [f"  ! {e}" for e in errors]
