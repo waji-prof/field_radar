@@ -1,4 +1,4 @@
-"""Field Radar — your free daily intelligence briefing.
+"""Psych Radar — your free daily intelligence briefing.
 
     python radar.py              fetch new items, rebuild dashboard, notify
     python radar.py --open       ...and open the dashboard in your browser
@@ -104,7 +104,7 @@ def fetch_all(sources, settings, db, now):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Field Radar")
+    ap = argparse.ArgumentParser(description="Psych Radar")
     ap.add_argument("--open", action="store_true", help="open the dashboard afterwards")
     ap.add_argument("--offline", action="store_true", help="don't fetch, just rebuild the dashboard")
     ap.add_argument("--no-notify", action="store_true", help="no Windows notification")
@@ -175,7 +175,7 @@ def main():
     soon = sorted((i for i in shown if i.get("days_left") is not None and i["days_left"] <= 14),
                   key=lambda i: i["days_left"])
     lines = [
-        f"Field Radar · {now.astimezone():%d %b %Y %H:%M}",
+        f"Psych Radar · {now.astimezone():%d %b %Y %H:%M}",
         f"Sources OK: {sum(s['ok'] for s in status)}/{len(status)}" if status else "Offline rebuild",
         f"New items stored: {new_total} · Shown on dashboard: {len(shown)} · New & relevant: {len(new_shown)}",
         f"Videos: {sum(m['media_tab'] == 'shorts' for m in media)} shorts · "
@@ -190,7 +190,7 @@ def main():
         second = f"{len(new_shown)} new relevant items"
         if soon:
             second += f" · ⏰ {len(soon)} deadline(s) within 14 days"
-        notify.notify("Field Radar — your daily briefing", second, top[:120], DASHBOARD)
+        notify.notify("Psych Radar — your daily briefing", second, top[:120], DASHBOARD)
 
     if args.open or settings.get("open_dashboard"):
         webbrowser.open(DASHBOARD.as_uri())
@@ -201,5 +201,5 @@ if __name__ == "__main__":
         main()
     except Exception:
         DATA.mkdir(exist_ok=True)
-        LOG.write_text("Field Radar crashed:\n" + traceback.format_exc(), encoding="utf-8")
+        LOG.write_text("Psych Radar crashed:\n" + traceback.format_exc(), encoding="utf-8")
         raise

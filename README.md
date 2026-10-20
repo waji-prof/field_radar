@@ -1,4 +1,4 @@
-# Field Radar
+# Psych Radar
 
 A free daily briefing for **Applied & Organizational Psychology, L&D, Future of Work,
 Behavioral Science, UX research, research methods, AI × Psychology & Learning, AI in HR/L&D,
@@ -72,7 +72,7 @@ Edit or add sources in **`sources.toml`**. Each source is a small block you can 
 - Videos **play inside the dashboard**, without YouTube's recommendations rabbit hole. Podcasts have a ▶ audio player.
 - Unwatched items stay for 14 days under "Earlier". Played items get **✓ Watched** (saved per device).
 - Videos come from hand-picked YouTube channels and podcasts in `sources.toml` (`type = "youtube"` / `"podcast"`).
-  YouTube blocks its RSS feeds for automated tools, so Field Radar reads each channel's public Videos and Shorts pages instead.
+  YouTube blocks its RSS feeds for automated tools, so Psych Radar reads each channel's public Videos and Shorts pages instead.
   If a channel redesign breaks this, the Sources tab shows ✗.
 - **Add a channel:** open the channel on YouTube → right-click → *View page source* → search for `externalId`
   → copy the `UC…` id into a new `[[sources]]` block (copy an existing YouTube block).
@@ -132,7 +132,7 @@ Items under `min_score` are hidden, and each source shows at most `max_per_sourc
 - **Some journals (often Elsevier) don't share abstracts** through Crossref, so those cards show
   only the title and link.
 - **EURAXESS and jobs.ac.uk have no working RSS feed**, and EURAXESS's search can't be read reliably,
-  so Field Radar finds their listings through Google News. It catches many but not all positions. Use the
+  so Psych Radar finds their listings through Google News. It catches many but not all positions. Use the
   one-tap **PhD portals** buttons for a complete search now and then.
 - **Deadlines are found automatically only when a listing writes them out**
   ("Apply by 2 December 2026"). WikiCFP shows **event dates**, not submission deadlines.
@@ -159,7 +159,7 @@ Nothing here turns on by itself. It stays `"none"` until you change it.
 ## Ideas for later (still ₹0)
 
 - **Run without your PC, read on your phone:** GitHub's free tier (GitHub Actions + GitHub Pages)
-  can run Field Radar daily in the cloud and publish the dashboard as a web page. The catch: on
+  can run Psych Radar daily in the cloud and publish the dashboard as a web page. The catch: on
   the free plan the page is public. It only contains public headlines and links, but it is visible to anyone with the address.
 - **Phone notifications:** *ntfy* is a free, open-source push-notification app.
 - **Weekly summary tab** (top themes of the week) and **export saved items to Zotero/BibTeX**.

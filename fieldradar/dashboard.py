@@ -98,10 +98,10 @@ TEMPLATE = r"""<!doctype html>
 <meta name="theme-color" content="#f6f5f1" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151513" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Field Radar">
+<meta name="apple-mobile-web-app-title" content="Psych Radar">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>📡</text></svg>">
-<title>Field Radar</title>
+<title>Psych Radar</title>
 <style>
 :root{
   --bg:#f6f5f1; --panel:#ffffff; --ink:#1d1d1b; --muted:#6b6a64; --line:#e4e1d8; --accent:#2d5b8a;
@@ -125,6 +125,7 @@ a{color:inherit}
 .wrap{max-width:980px;margin:0 auto;padding:20px 16px 60px}
 header h1{margin:0;font-size:26px;letter-spacing:-.01em}
 header p{margin:4px 0 0;color:var(--muted);font-size:14px}
+header .tagline{margin:2px 0 6px;color:var(--ink);font-size:16px;font-weight:600;letter-spacing:-.005em}
 .stats{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px}
 .stat{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:13px}
 .stat b{font-variant-numeric:tabular-nums}
@@ -210,7 +211,8 @@ h2{font-size:18px;margin:26px 0 8px}
 <body>
 <div class="wrap">
   <header>
-    <h1>Field Radar</h1>
+    <h1>Psych Radar</h1>
+    <p class="tagline">Stop scrolling. Start learning.</p>
     <p id="sub"></p>
     <div class="stats" id="stats"></div>
   </header>
@@ -252,7 +254,7 @@ document.addEventListener('visibilitychange', () => { if (document.visibilitySta
 const fmt = iso => iso ? new Date(iso).toLocaleDateString(undefined, {day:'numeric', month:'short', year:'numeric'}) : '';
 
 const gen = new Date(D.meta.generated);
-$('#sub').textContent = 'Applied & Organizational Psychology · L&D · Behavioral Science — updated ' +
+$('#sub').textContent = 'Updated ' +
   gen.toLocaleString(undefined, {weekday:'short', day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
 const newCount = D.items.filter(i => i.fresh).length;
 const soon = D.deadlines.filter(d => d.days_left >= 0 && d.days_left <= 30).length;
@@ -363,7 +365,7 @@ function mediaView(tab){
 }
 function portalsView(){
   return `<h2 style="margin-top:6px">PhD portals — one tap</h2>
-    <p class="intro">Sites Field Radar can't fully read automatically. Open them directly for a complete search.</p>
+    <p class="intro">Sites Psych Radar can't fully read automatically. Open them directly for a complete search.</p>
     <div class="portals">${D.portals.map(p => `<a class="portal" href="${esc(p.url)}" target="_blank" rel="noopener"><b>${esc(p.name)} ↗</b><span>${esc(p.note)}</span></a>`).join('')}</div>
     <h2>Found for you</h2>`;
 }

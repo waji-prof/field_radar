@@ -1,8 +1,8 @@
-# Field Radar in the cloud (GitHub Actions, free for public repositories).
+# Psych Radar in the cloud (GitHub Actions, free for public repositories).
 # Runs 3 times a day and publishes the dashboard with GitHub Pages.
 # Times are in UTC: 02:30 / 07:30 / 12:30 UTC = 8:00 AM / 1:00 PM / 6:00 PM India time.
 # (GitHub may start scheduled runs a few minutes late — that's normal.)
-name: Field Radar
+name: Psych Radar
 
 on:
   schedule:

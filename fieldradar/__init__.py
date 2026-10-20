@@ -1,1 +1,1 @@
-"""Field Radar — a free, local research & industry briefing."""
+"""Psych Radar — a free, local research & industry briefing."""
